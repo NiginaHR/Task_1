@@ -21,21 +21,19 @@ public class BunTest {
     }
 
 
-
     @ParameterizedTest
     @MethodSource("bunData")
     public void testGetName(String name, float price) {
-        Bun bun=new Bun(name, price);
+        Bun bun = new Bun(name, price);
         assertEquals(name, bun.getName());
     }
-
 
 
     @ParameterizedTest
     @MethodSource("bunData")
     public void testGetPrice(String name, float price) {
 
-        Bun bun=new Bun(name, price);
+        Bun bun = new Bun(name, price);
 
         assertEquals(price, bun.getPrice());
 

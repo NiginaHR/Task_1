@@ -3,63 +3,60 @@ package praktikum_test;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import praktikum.Bun;
 import praktikum.Burger;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
 
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class BurgerTest {
- static  Stream<Arguments> bunData() {
-        return Stream.of(
-                Arguments.of("Чикенбургер", 150f)
-        );
-    }
+    @Mock
+    private Bun mockBun;
 
-    @ParameterizedTest
-    @MethodSource("bunData")
-    public void testGetPrice(String name, float price) {
-
-        Bun bun=new Bun(name, price);
-
-        assertEquals(price, bun.getPrice());
-
-    }
-
+    @Mock
+    private Ingredient mockIngredientOne;
+    @Mock
+    private Ingredient mockIngredientTwo;
+    @Mock
+    private Ingredient mockIngredientThree;
 
 
     @Test
-    void testSetBuns()  {
+    void testSetBuns() {
+        when(mockBun.getName()).thenReturn("black bun");
+        when(mockBun.getPrice()).thenReturn(100f);
+
 
         Burger burger = new Burger();
 
-        Bun bun = new Bun("black bun", 100f);
-        burger.setBuns(bun);
+        burger.setBuns(mockBun);
 
         assertEquals("black bun", burger.bun.getName());
         assertEquals(100f, burger.bun.getPrice(), 0.01f);
     }
 
 
-
     @Test
     void testAddIngredient() {
+        when(mockIngredientOne.getName()).thenReturn("hot sauce");
+        when(mockIngredientOne.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientOne.getPrice()).thenReturn(100f);
+
+
         Burger burger = new Burger();
 
-        Ingredient ingredient = new Ingredient(IngredientType.SAUCE, "hot sauce", 100f);
-        burger.addIngredient(ingredient);
+        burger.addIngredient(mockIngredientOne);
 
         assertEquals(1, burger.ingredients.size());
 
@@ -70,15 +67,24 @@ public class BurgerTest {
     @Test
     void testRemoveIngredient() {
 
+
+        when(mockIngredientOne.getName()).thenReturn("hot sauce");
+        when(mockIngredientOne.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientOne.getPrice()).thenReturn(100f);
+
+        when(mockIngredientTwo.getName()).thenReturn("cutlet");
+        when(mockIngredientTwo.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientTwo.getPrice()).thenReturn(100f);
+
+        when(mockIngredientThree.getName()).thenReturn("sour cream");
+        when(mockIngredientThree.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientThree.getPrice()).thenReturn(200f);
+
         Burger burger = new Burger();
 
-        Ingredient sauce = new Ingredient(IngredientType.SAUCE, "hot sauce", 100f);
-        Ingredient filling = new Ingredient(IngredientType.FILLING, "cutlet", 100);
-        Ingredient sauce2 = new Ingredient(IngredientType.SAUCE, "sour cream", 200f);
-
-        burger.addIngredient(sauce);
-        burger.addIngredient(filling);
-        burger.addIngredient(sauce2);
+        burger.addIngredient(mockIngredientOne);
+        burger.addIngredient(mockIngredientTwo);
+        burger.addIngredient(mockIngredientThree);
 
         assertEquals(3, burger.ingredients.size());
 
@@ -91,15 +97,23 @@ public class BurgerTest {
     @Test
     void testMoveIngredient() {
 
+        when(mockIngredientOne.getName()).thenReturn("hot sauce");
+        when(mockIngredientOne.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientOne.getPrice()).thenReturn(100f);
+
+        when(mockIngredientTwo.getName()).thenReturn("cutlet");
+        when(mockIngredientTwo.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientTwo.getPrice()).thenReturn(100f);
+
+        when(mockIngredientThree.getName()).thenReturn("sour cream");
+        when(mockIngredientThree.getType()).thenReturn(IngredientType.SAUCE);
+        when(mockIngredientThree.getPrice()).thenReturn(200f);
+
         Burger burger = new Burger();
 
-        Ingredient sauce = new Ingredient(IngredientType.SAUCE, "hot sauce", 100f);
-        Ingredient filling = new Ingredient(IngredientType.FILLING, "cutlet", 100);
-        Ingredient sauce2 = new Ingredient(IngredientType.SAUCE, "sour cream", 200f);
-
-        burger.addIngredient(sauce);
-        burger.addIngredient(filling);
-        burger.addIngredient(sauce2);
+        burger.addIngredient(mockIngredientOne);
+        burger.addIngredient(mockIngredientTwo);
+        burger.addIngredient(mockIngredientThree);
 
         assertEquals(3, burger.ingredients.size());
 
@@ -109,26 +123,19 @@ public class BurgerTest {
     }
 
 
-    @Mock
-    private Bun mockBun;
-
-    @Mock
-    private Ingredient mockIngredient;
-
-
     @Test
     public void testGetReceipt() {
 
         when(mockBun.getName()).thenReturn("black bun");
         when(mockBun.getPrice()).thenReturn(100f);
 
-        when(mockIngredient.getName()).thenReturn("hot sauce");
-        when(mockIngredient.getType()).thenReturn(IngredientType.FILLING);
-        when(mockIngredient.getPrice()).thenReturn(50f);
+        when(mockIngredientOne.getName()).thenReturn("hot sauce");
+        when(mockIngredientOne.getType()).thenReturn(IngredientType.FILLING);
+        when(mockIngredientOne.getPrice()).thenReturn(50f);
 
         Burger burger = new Burger();
         burger.setBuns(mockBun);
-        burger.addIngredient(mockIngredient);
+        burger.addIngredient(mockIngredientOne);
 
         String receipt = burger.getReceipt();
 
